@@ -120,5 +120,4 @@ class Tree extends ActiveRecord
      */
     public $disabledOrig = true;
 
-
 }

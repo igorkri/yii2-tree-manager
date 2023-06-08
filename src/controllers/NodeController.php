@@ -21,13 +21,16 @@ use yii\base\Event;
 use yii\base\InvalidCallException;
 use yii\base\InvalidConfigException;
 use yii\base\NotSupportedException;
+use yii\behaviors\SluggableBehavior;
 use yii\db\Exception as DbException;
+use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\web\View;
 use yii\web\UploadedFile;
+use Ausi\SlugGenerator\SlugGenerator;
 
 /**
  * NodeController manages all the manipulation actions for each tree node. It includes security validations to ensure
@@ -36,6 +39,8 @@ use yii\web\UploadedFile;
  */
 class NodeController extends Controller
 {
+
+
     /**
      * @var array the list of keys in $_POST which must be cast as boolean
      */
@@ -143,6 +148,7 @@ class NodeController extends Controller
          * @var Tree $parent
          * @var \yii\web\Session $session
          */
+
         $post = Yii::$app->request->post();
         $modelC = explode('\\', $post['modelClass']);
         $modelClass = array_pop($modelC);
@@ -173,6 +179,11 @@ class NodeController extends Controller
         $node->disabledOrig = $node->disabled;
         $isNewRecord = $node->isNewRecord;
 
+        if($isNewRecord && !empty($post[$modelClass]['name'])) {
+            $generator = new SlugGenerator;
+            $slug = $generator->generate($post[$modelClass]['name'], ['delimiter' => '_']);
+            $post[$modelClass]['slug'] = $slug;
+        }
         if(isset($_FILES[$modelClass]['size']['image']) && $_FILES[$modelClass]['size']['image'] > 0){
             $dir = Yii::getAlias('@frontend/web/images/category/');
             $file = UploadedFile::getInstance($node, 'image');
