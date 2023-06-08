@@ -1,12 +1,13 @@
 <?php
 
-use igorkri\form\ActiveForm;
+use kartik\form\ActiveForm;
 use igorkri\tree\Module;
 use igorkri\tree\TreeView;
 use igorkri\tree\models\Tree;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\View;
+use kartik\file\FileInput;
 
 /**
  * @var View $this
@@ -262,23 +263,39 @@ $icons = is_array($iconsList) ? array_values($iconsList) : $iconsList;
         <?php if ($iconsListShow === 'text'): ?>
             <div class="row">
                 <div class="col-sm-4">
-                    <?= $form->field($node, $iconTypeAttribute)->dropdownList([
-                        TreeView::ICON_CSS => 'CSS Suffix',
-                        TreeView::ICON_RAW => 'Raw Markup',
-                        ], $inputOpts) ?>
+                    <?php // $form->field($node, $iconTypeAttribute)->dropdownList([
+//                        TreeView::ICON_CSS => 'CSS Suffix',
+//                        TreeView::ICON_RAW => 'Raw Markup',
+//                        ], $inputOpts) ?>
                 </div>
                 <div class="col-sm-8">
-                    <?= $form->field($node, $iconAttribute)->textInput($inputOpts) ?>
+                    <?php // $form->field($node, $iconAttribute)->hiddenInput($inputOpts) ?>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <?= $form->field($node, $slug)->textInput($inputOpts) ?>
+                    <?php // $form->field($node, 'slug')->textInput($inputOpts) ?>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <?= $form->field($node, $image)->textInput($inputOpts) ?>
+                    <?= $form->field($node, 'image')->widget(FileInput::class, [
+                        'language' => 'uk',
+                        'options' => ['accept' => 'image/*'],
+                        'pluginOptions' => [
+                            'maxFileCount' => 1,
+//                    'showCaption' => false,
+                            'showRemove' => false,
+                            'showUpload' => false,
+//                    'browseClass' => 'btn btn-primary btn-block',
+//                    'browseIcon' => '<i class="fas fa-camera"></i> ',
+//                    'browseLabel' =>  ''
+                            'initialPreview'=>[
+                                ($node->image != null || $node->image != '') ? Yii::$app->request->hostInfo . $node->image : null,
+                            ],
+                            'initialPreviewAsData'=>true,
+                        ],
+                    ]);?>
                 </div>
             </div>
         <?php endif; ?>

@@ -8,6 +8,7 @@
 
 namespace igorkri\tree\models;
 
+use yii\behaviors\SluggableBehavior;
 use yii\db\ActiveRecord;
 
 /**
@@ -118,4 +119,6 @@ class Tree extends ActiveRecord
      * @var bool attribute to cache the `disabled` state before a model update.
      */
     public $disabledOrig = true;
+
+
 }

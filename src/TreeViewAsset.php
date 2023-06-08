@@ -8,7 +8,7 @@
 
 namespace igorkri\tree;
 
-use igorkri\base\AssetBundle;
+use kartik\base\AssetBundle;
 
 /**
  * Asset bundle for the [[TreeView]] widget.

@@ -242,7 +242,7 @@
                     $h.addCss($detail, 'kv-loading');
                 },
                 success: function (data, textStatus, jqXHR) {
-                    $detail.removeClass('kv-loading');
+                    $detail.removeClass('kv-loading'), 5000
                     if (!self.raise('treeview:selected', [key, data, textStatus, jqXHR])) {
                         return;
                     }

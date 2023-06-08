@@ -29,11 +29,11 @@ class m230416_200116_tree extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
         }
         $this->createTable(self::TABLE_NAME, [
-            'id' => $this->bigPrimaryKey(),
+            'id' => $this->primaryKey(),
             'root' => $this->integer(),
-            'lft' => $this->integer()->notNull(),
-            'rgt' => $this->integer()->notNull(),
-            'lvl' => $this->smallInteger(5)->notNull(),
+            'lft' => $this->integer(),
+            'rgt' => $this->integer(),
+            'lvl' => $this->smallInteger(5),
             'name' => $this->string(60)->notNull(),
             'icon' => $this->string(255),
             'slug' => $this->string(255),

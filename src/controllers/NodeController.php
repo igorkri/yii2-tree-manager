@@ -10,7 +10,7 @@ namespace igorkri\tree\controllers;
 
 use Closure;
 use Exception;
-use igorkri\base\Lib;
+use kartik\base\Lib;
 use igorkri\tree\Module;
 use igorkri\tree\models\Tree;
 use igorkri\tree\TreeView;
@@ -23,9 +23,11 @@ use yii\base\InvalidConfigException;
 use yii\base\NotSupportedException;
 use yii\db\Exception as DbException;
 use yii\helpers\ArrayHelper;
+use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\web\View;
+use yii\web\UploadedFile;
 
 /**
  * NodeController manages all the manipulation actions for each tree node. It includes security validations to ensure
@@ -142,6 +144,8 @@ class NodeController extends Controller
          * @var \yii\web\Session $session
          */
         $post = Yii::$app->request->post();
+        $modelC = explode('\\', $post['modelClass']);
+        $modelClass = array_pop($modelC);
         static::checkValidRequest(false, !isset($post['treeNodeModify']));
         $data = static::getPostData();
         $parentKey = ArrayHelper::getValue($data, 'parentKey', null);
@@ -168,6 +172,20 @@ class NodeController extends Controller
         $node->visibleOrig = $node->visible;
         $node->disabledOrig = $node->disabled;
         $isNewRecord = $node->isNewRecord;
+
+        if(isset($_FILES[$modelClass]['size']['image']) && $_FILES[$modelClass]['size']['image'] > 0){
+            $dir = Yii::getAlias('@frontend/web/images/category/');
+            $file = UploadedFile::getInstance($node, 'image');
+            $imageName = date('dmyy', time()) . '-' . uniqid();
+            $file->saveAs($dir . $imageName . '.' . $file->extension);
+            $node->image = '/images/category/' . $imageName . '.' . $file->extension;
+            $post[$modelClass]['image'] = $node->image;
+        }else{
+            $img = $post['modelClass']::findOne($post[$modelClass]['id']);
+            if($img){
+                $post[$modelClass]['image'] = $img->image;
+            }
+        }
         $node->load($post);
         $errors = $success = false;
         if (Yii::$app->has('session')) {

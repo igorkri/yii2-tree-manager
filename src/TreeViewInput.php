@@ -9,7 +9,7 @@
 namespace igorkri\tree;
 
 use Exception;
-use igorkri\base\Lib;
+use kartik\base\Lib;
 use igorkri\tree\models\Tree;
 use Yii;
 use yii\helpers\Html;

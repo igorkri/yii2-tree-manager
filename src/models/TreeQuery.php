@@ -8,6 +8,7 @@
 
 namespace igorkri\tree\models;
 
+use yii\behaviors\SluggableBehavior;
 use yii\db\ActiveQuery;
 use creocoder\nestedsets\NestedSetsQueryBehavior;
 
@@ -25,4 +26,5 @@ class TreeQuery extends ActiveQuery
             NestedSetsQueryBehavior::class,
         ];
     }
+
 }
